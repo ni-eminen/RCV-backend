@@ -1,0 +1,6 @@
+POST http://localhost:3000/ HTTP/1.1
+content-type: application/json
+
+{
+    "component": "const [num, setNum] = useState(0); return ( <div> <p>{num}</p> <button onClick={() => setNum(num + 1)}>click me</button> </div> );"
+}
