@@ -1,4 +1,3 @@
-// const bodyParser = require("body-parser");
 const express = require("express");
 const fse = require("fs-extra");
 const app = express();
@@ -7,13 +6,18 @@ const util = require("util");
 const exec = util.promisify(require("child_process").exec);
 const { v4: uuidv4 } = require("uuid");
 const path = require("path");
+require("dotenv").config();
 
 // parse various different custom JSON types as JSON
 app.use(express.json());
 
-const port = 3000;
+const PORT = process.env.PORT | 3000;
 
-app.post("/", async (req, res) => {
+app.listen(PORT, () => {
+  console.log(`Example app listening on port ${PORT}`);
+});
+
+app.post("/api/component", async (req, res) => {
   const foldername = uuidv4();
   readWriteSync(req.body.component, foldername);
 
@@ -32,11 +36,7 @@ app.post("/", async (req, res) => {
   res.sendFile(path.join(__dirname, `${foldername}/build/index.html`));
 });
 
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
-});
-
-function readWriteSync(component, foldername) {
+const readWriteSync = (component, foldername) => {
   const newAppPath = foldername;
   try {
     copyFolder("./minimal-react-app", `./${newAppPath}`);
@@ -48,7 +48,7 @@ function readWriteSync(component, foldername) {
   const newValue = data.replace("//component", component);
 
   fs.writeFileSync(`./${newAppPath}/src/index.js`, newValue, "utf-8");
-}
+};
 
 const copyFolder = (src, dest) => {
   // To copy a folder or file
