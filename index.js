@@ -18,13 +18,14 @@ app.listen(PORT, () => {
 });
 
 app.post("/api/component", async (req, res) => {
-  const foldername = uuidv4();
+  const foldername = "minimal-react-app"; //uuidv4();
+  console.log("body:", req.body.component);
   readWriteSync(req.body.component, foldername);
-
+  console.log("read and wrote");
   const npmscripts = async () => {
     try {
       const { stdout, stderr } = await exec(
-        `cd ${foldername} && npm run build && npx gulp`
+        `cd ${foldername} && ./node_modules/webpack/bin/webpack.js && npx gulp`
       );
       console.log("stdout:", stdout);
       console.log("stderr:", stderr);
@@ -34,16 +35,12 @@ app.post("/api/component", async (req, res) => {
   };
   await npmscripts();
   res.sendFile(path.join(__dirname, `${foldername}/build/index.html`));
+  const baseApp = fs.readFileSync(`./${foldername}/src/indexBase.js`, "utf-8");
+  fs.writeFileSync(`./${foldername}/src/index.js`, baseApp, "utf-8");
 });
 
 const readWriteSync = (component, foldername) => {
   const newAppPath = foldername;
-  try {
-    copyFolder("./minimal-react-app", `./${newAppPath}`);
-  } catch (e) {
-    console.log("couldnt copy folder", e.message);
-  }
-
   const data = fs.readFileSync("./minimal-react-app/src/index.js", "utf-8");
   const newValue = data.replace("//component", component);
 
