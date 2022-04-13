@@ -11,7 +11,7 @@ require("dotenv").config();
 // parse various different custom JSON types as JSON
 app.use(express.json());
 
-const PORT = process.env.PORT | 3000;
+const PORT = process.env.PORT | 8080;
 
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}`);
