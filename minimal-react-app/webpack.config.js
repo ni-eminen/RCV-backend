@@ -3,6 +3,9 @@ const webpack = require("webpack");
 var CompressionPlugin = require("compression-webpack-plugin");
 
 module.exports = {
+  optimization: {
+    minimize: true, //Update this to true or false
+  },
   entry: "./src/index.js",
   output: {
     filename: "./app.js",
@@ -24,7 +27,6 @@ module.exports = {
         NODE_ENV: JSON.stringify("production"),
       },
     }),
-    new webpack.optimize.UglifyJsPlugin(), //minify everything
     new webpack.optimize.AggressiveMergingPlugin(), //Merge chunks
   ],
   devServer: {
