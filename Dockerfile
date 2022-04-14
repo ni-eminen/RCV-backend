@@ -13,7 +13,7 @@ RUN npm install
 # RUN npm ci --only=production
 
 WORKDIR /usr/src/app/minimal-react-app
-RUN echo pwd
+RUN pwd
 RUN npm install
 
 WORKDIR /usr/src/app
